@@ -6,16 +6,19 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// app/Config/Routes.php
+// Default: arahkan ke login
+$routes->get('/', 'Auth::login');
 
 $routes->get('/login', 'Auth::login');  
 $routes->post('/auth/processLogin', 'Auth::processLogin');  
 $routes->get('/logout', 'Auth::logout');
 
-// setelah login, redirect sesuai role
-$routes->get('/gudang/dashboard', 'Gudang::dashboard');
-$routes->get('/dapur/dashboard', 'Dapur::dashboard');
+$routes->group('dapur', ['filter' => 'dapurfilter'], function($routes) {
+    $routes->get('dashboard', 'Dapur::dashboard');
+    
+});
 
+$routes->group('gudang', ['filter' => 'gudangfilter'], function($routes) {
+    $routes->get('dashboard', 'Gudang::dashboard');
 
-
-
+});

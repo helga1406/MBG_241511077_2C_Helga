@@ -6,56 +6,63 @@ use App\Models\UserModel;
 
 class Auth extends BaseController
 {
+    // Form login
     public function login()
     {
         return view('auth/login');
     }
 
+    // Proses login
     public function processLogin()
     {
-        $session = session();
+        $session   = session();
         $userModel = new UserModel();
 
-        $email    = $this->request->getPost('email');
-        $password = md5($this->request->getPost('password')); // hash harus sama dengan DB
+        $email    = trim($this->request->getPost('email'));
+        $password = trim($this->request->getPost('password'));
 
+        // Validasi input kosong
+        if (empty($email) || empty($password)) {
+            $session->setFlashdata('msg', 'Email dan password wajib diisi!');
+            return redirect()->to(base_url('login'));
+        }
+
+        // Cari user berdasarkan email
         $user = $userModel->where('email', $email)->first();
 
         if ($user) {
-            if ($user['password'] === $password) {
-                // Simpan ke session
+            // Cek password pakai MD5 (sesuai DB)
+            if (md5($password) === $user['password']) {
+                // Simpan session
                 $ses_data = [
                     'id'        => $user['id'],
                     'name'      => $user['name'],
                     'email'     => $user['email'],
                     'role'      => $user['role'],
-                    'logged_in' => TRUE
+                    'isLoggedIn'=> true   // konsisten dengan filter
                 ];
                 $session->set($ses_data);
 
                 // Redirect sesuai role
                 if ($user['role'] == 'gudang') {
-                    return redirect()->to('/gudang/dashboard');
+                    return redirect()->to(base_url('gudang/dashboard'));
                 } elseif ($user['role'] == 'dapur') {
-                    return redirect()->to('/dapur/dashboard');
-                } else {
-                    $session->setFlashdata('msg', 'Role tidak dikenali!');
-                    return redirect()->to('/login');
+                    return redirect()->to(base_url('dapur/dashboard'));
                 }
             } else {
                 $session->setFlashdata('msg', 'Password salah!');
-                return redirect()->to('/login');
+                return redirect()->to(base_url('login'));
             }
         } else {
             $session->setFlashdata('msg', 'Email tidak ditemukan!');
-            return redirect()->to('/login');
+            return redirect()->to(base_url('login'));
         }
     }
 
+    // Logout
     public function logout()
     {
-        $session = session();
-        $session->destroy();
-        return redirect()->to('/login');
+        session()->destroy();
+        return redirect()->to(base_url('login'));
     }
 }

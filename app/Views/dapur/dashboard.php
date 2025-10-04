@@ -4,45 +4,27 @@
 <div class="container-fluid p-4">
   <!-- Header -->
   <div class="mb-4">
-    <h3 class="fw-bold text-primary">Dashboard Dapur</h3>
-    <p class="text-muted mb-1">Selamat datang, <b><?= session()->get('name') ?></b></p>
-    <span class="badge bg-info">
-      <?= ucfirst(session()->get('role')) ?>
-    </span>
+    <h3 class="fw-bold text-warning">📊Dashboard Dapur</h3>
+    <p class="text-muted mb-1">
+      Selamat datang, <b><?= session()->get('name') ?></b>!
+    </p>
+    <span class="badge bg-warning text-dark"><?= ucfirst(session()->get('role')) ?></span>
   </div>
 
   <!-- Menu Cepat -->
   <div class="row g-4">
-    <!-- Buat Permintaan -->
+    <!-- Permintaan Bahan -->
     <div class="col-md-6 col-lg-4">
-      <div class="card border-0 shadow-sm h-100 hover-card">
+      <div class="card shadow-sm border-0 h-100 hover-card">
         <div class="card-body d-flex flex-column justify-content-between">
           <div>
-            <h5 class="fw-bold text-primary">Buat Permintaan Bahan</h5>
-            <p class="text-muted">Ajukan permintaan bahan untuk masak H-1</p>
+            <h5 class="fw-bold text-primary mb-2">📑 Permintaan Bahan</h5>
+            <p class="text-muted">Ajukan dan lihat status permintaan bahan baku</p>
           </div>
-          <a href="<?= base_url('permintaan/create') ?>" class="btn btn-primary mt-2">Buat Permintaan</a>
+          <a href="<?= base_url('dapur/permintaan') ?>" class="btn btn-primary shadow-sm mt-2">Kelola</a>
         </div>
       </div>
     </div>
-
-    <!-- Lihat Status Permintaan -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card border-0 shadow-sm h-100 hover-card">
-        <div class="card-body d-flex flex-column justify-content-between">
-          <div>
-            <h5 class="fw-bold text-success">Lihat Status Permintaan</h5>
-            <p class="text-muted">Cek status permintaan (menunggu/disetujui/ditolak)</p>
-          </div>
-          <a href="<?= base_url('permintaan') ?>" class="btn btn-success mt-2">Lihat Status</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Logout -->
-  <div class="mt-4">
-    <a href="<?= base_url('logout') ?>" class="btn btn-danger">Logout</a>
   </div>
 </div>
 

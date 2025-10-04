@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+<?= $this->include('layout/header') ?>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -23,7 +16,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <form action="<?= base_url('auth/processLogin') ?>" method="post" novalidate class="needs-validation">
+                    <form action="<?= base_url('auth/processLogin') ?>" method="post">
                         <div class="mb-3">
                             <label>Email</label>
                             <input type="email" name="email" class="form-control" placeholder="Masukkan email" required>
@@ -46,23 +39,7 @@
     </div>
 </div>
 
-<!-- Bootstrap Validasi -->
-<script>
-    (function () {
-        'use strict'
-        let forms = document.querySelectorAll('.needs-validation')
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-    })()
-</script>
-
 </body>
 </html>
+
+<?= $this->include('layout/footer') ?>

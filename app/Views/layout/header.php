@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Akademik</title>
+  <title>MBG</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -11,7 +11,7 @@
       display: flex;
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
+      background: #ffffffff;
     }
     .sidebar {
       width: 250px;
@@ -48,9 +48,9 @@
       color: #fff;
       padding-left: 28px;
     }
-    /* ✅ Menu aktif */
+    /* Menu aktif */
     .sidebar a.active {
-      background: #080b4eff; /* hijau bootstrap */
+      background: #080b4eff; 
       color: #fff !important;
       font-weight: bold;
       border-radius: 6px;
@@ -71,6 +71,7 @@
       transform: translateY(-5px);
       box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     }
+
   </style>
 </head>
 <body>

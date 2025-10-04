@@ -1,39 +1,48 @@
-<!-- Sidebar Gudang -->
-<div class="sidebar bg-light p-3 border-end" style="min-height: 100vh;">
+<!-- Sidebar -->
+<div class="sidebar">
   <?php $uri = service('uri'); ?>
 
-  <div class="mb-4">
-    <div class="fw-bold fs-5 mb-2">📦 MBG Gudang</div>
-    <div class="small text-muted">
-      👋 Halo, <b><?= session()->get('name') ?></b><br>
-      <span class="badge bg-info"><?= ucfirst(session()->get('role')) ?></span>
+  <div>
+    <div class="brand">MBG</div>
+    <div class="user-info">
+      👋Halo, <b><?= session()->get('name') ?></b><br>
+      <small><?= ucfirst(session()->get('role')) ?></small>
     </div>
+
+    <!-- Menu Dinamis -->
+    <?php if (session()->get('role') === 'gudang'): ?>
+      <a href="<?= base_url('gudang/dashboard') ?>" 
+         class="<?= ($uri->getSegment(2) === 'dashboard') ? 'active' : '' ?>">
+         📊 Dashboard
+      </a>
+      <a href="<?= base_url('gudang/bahan') ?>" 
+         class="<?= ($uri->getSegment(2) === 'bahan') ? 'active' : '' ?>">
+         📦 Data Bahan
+      </a>
+      <a href="<?= base_url('gudang/permintaan') ?>" 
+         class="<?= ($uri->getSegment(2) === 'permintaan') ? 'active' : '' ?>">
+         📝 Permintaan Masuk
+      </a>
+
+    <?php elseif (session()->get('role') === 'dapur'): ?>
+      <a href="<?= base_url('dapur/dashboard') ?>" 
+         class="<?= ($uri->getSegment(2) === 'dashboard') ? 'active' : '' ?>">
+         📊 Dashboard
+      </a>
+      <a href="<?= base_url('dapur/permintaan') ?>" 
+         class="<?= ($uri->getSegment(2) === 'permintaan' && $uri->getSegment(3) === null) ? 'active' : '' ?>">
+         📝 Lihat Permintaan
+      </a>
+    <?php endif; ?>
   </div>
 
-  <!-- Menu Gudang -->
-  <a href="<?= base_url('gudang') ?>" 
-     class="d-block mb-2 <?= ($uri->getSegment(1) === 'gudang') ? 'fw-bold text-primary' : '' ?>">
-     📊 Dashboard
-  </a>
-
-  <a href="<?= base_url('bahan/create') ?>" 
-     class="d-block mb-2 <?= ($uri->getSegment(2) === 'create') ? 'fw-bold text-primary' : '' ?>">
-     Tambah Bahan Baku
-  </a>
-
-  <a href="<?= base_url('bahan') ?>" 
-     class="d-block mb-2 <?= ($uri->getSegment(1) === 'bahan') ? 'fw-bold text-primary' : '' ?>">
-     Lihat Data Bahan
-  </a>
-
-  <a href="<?= base_url('permintaan') ?>" 
-     class="d-block mb-2 <?= ($uri->getSegment(1) === 'permintaan') ? 'fw-bold text-primary' : '' ?>">
-     Persetujuan Permintaan
-  </a>
-
   <!-- Logout -->
-  <div class="mt-4">
-    <a href="<?= base_url('logout') ?>" class="btn btn-danger w-100">🚪 Logout</a>
+  <div class="logout">
+  <a href="<?= base_url('logout') ?>" class="btn btn-light w-100 text-danger fw-bold btn-sm btn-logout">
+  Logout
+  </a>
   </div>
 </div>
 
+<!-- Content -->
+<div class="content">

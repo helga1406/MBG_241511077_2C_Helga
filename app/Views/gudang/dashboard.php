@@ -4,55 +4,39 @@
 <div class="container-fluid p-4">
   <!-- Header -->
   <div class="mb-4">
-    <h3 class="fw-bold text-primary">Dashboard Gudang</h3>
+    <h3 class="fw-bold text-primary">📊Dashboard Gudang</h3>
     <p class="text-muted mb-1">Selamat datang, <b><?= session()->get('name') ?></b></p>
-    <span class="badge bg-info">
-      <?= ucfirst(session()->get('role')) ?>
-    </span>
+    <span class="badge bg-success"><?= ucfirst(session()->get('role')) ?></span>
   </div>
 
   <!-- Menu Cepat -->
   <div class="row g-4">
-    <!-- Tambah Bahan Baku -->
+    <!-- Kelola Data Bahan -->
     <div class="col-md-6 col-lg-4">
       <div class="card border-0 shadow-sm h-100 hover-card">
         <div class="card-body d-flex flex-column justify-content-between">
           <div>
-            <h5 class="fw-bold text-primary">Tambah Bahan Baku</h5>
-            <p class="text-muted">Input bahan baku baru ke dalam sistem</p>
+            <h5 class="fw-bold text-primary mb-2">📦 Data Bahan</h5>
+            <p class="text-muted">Kelola stok bahan baku</p>
           </div>
-          <a href="<?= base_url('bahan/create') ?>" class="btn btn-primary mt-2">Tambah</a>
+          <a href="<?= base_url('gudang/bahan') ?>" class="btn btn-primary mt-2 shadow-sm">Kelola</a>
         </div>
       </div>
     </div>
 
-    <!-- Lihat Data Bahan Baku -->
+    <!-- Kelola Permintaan -->
     <div class="col-md-6 col-lg-4">
       <div class="card border-0 shadow-sm h-100 hover-card">
         <div class="card-body d-flex flex-column justify-content-between">
           <div>
-            <h5 class="fw-bold text-success">Lihat Data Bahan Baku</h5>
-            <p class="text-muted">Cek stok bahan baku dengan statusnya</p>
+            <h5 class="fw-bold text-danger mb-2">📝 Permintaan Dapur</h5>
+            <p class="text-muted">Lihat & proses permintaan bahan dari dapur</p>
           </div>
-          <a href="<?= base_url('bahan') ?>" class="btn btn-success mt-2">Lihat Data</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Persetujuan Permintaan -->
-    <div class="col-md-6 col-lg-4">
-      <div class="card border-0 shadow-sm h-100 hover-card">
-        <div class="card-body d-flex flex-column justify-content-between">
-          <div>
-            <h5 class="fw-bold text-warning">Persetujuan Permintaan</h5>
-            <p class="text-muted">Setujui atau tolak permintaan dari dapur</p>
-          </div>
-          <a href="<?= base_url('permintaan') ?>" class="btn btn-warning mt-2">Kelola</a>
+          <a href="<?= base_url('gudang/permintaan') ?>" class="btn btn-danger mt-2 shadow-sm">Kelola</a>
         </div>
       </div>
     </div>
   </div>
-
+</div>
 
 <?= $this->include('layout/footer') ?>
-

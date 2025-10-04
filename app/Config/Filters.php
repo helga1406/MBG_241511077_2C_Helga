@@ -35,8 +35,8 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         // Tambahan
-        'adminfilter' => \App\Filters\AdminFilter::class,
-        'userfilter'  => \App\Filters\UserFilter::class,
+        'dapurfilter'  => \App\Filters\DapurFilter::class,
+        'gudangfilter' => \App\Filters\GudangFilter::class,
 
     ];
 
