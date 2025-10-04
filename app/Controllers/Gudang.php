@@ -31,7 +31,28 @@ class Gudang extends BaseController
         return null;
     }
 
+    private function hitungStatus($jumlah, $kadaluarsa)
+    {
+        $today = date('Y-m-d');
+        if ($jumlah <= 0) {
+            return "Habis";
+        } elseif ($today >= $kadaluarsa) {
+            return "Kadaluarsa";
+        } elseif ((strtotime($kadaluarsa) - strtotime($today)) / 86400 <= 3) {
+            return "Segera Kadaluarsa";
+        }
+        return "Tersedia";
+    }
+
     // ================= CRUD BAHAN =================
+    public function bahanIndex()
+    {
+        $bahan = $this->bahanModel->findAll();
+        foreach ($bahan as &$row) {
+            $row['status'] = $this->hitungStatus($row['jumlah'], $row['tanggal_kadaluarsa']);
+        }
+        return view('gudang/bahan/index', ['bahan' => $bahan]);
+    }
 
     public function bahanCreate()
     {
