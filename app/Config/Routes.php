@@ -15,7 +15,9 @@ $routes->get('/logout', 'Auth::logout');
 
 $routes->group('dapur', ['filter' => 'dapurfilter'], function($routes) {
     $routes->get('dashboard', 'Dapur::dashboard');
-
+    $routes->get('permintaan', 'Dapur::permintaanIndex');
+    $routes->get('permintaan/create', 'Dapur::permintaanCreate');
+    $routes->post('permintaan/store', 'Dapur::permintaanStore');
 });
 
 $routes->group('gudang', ['filter' => 'gudangfilter'], function($routes) {
