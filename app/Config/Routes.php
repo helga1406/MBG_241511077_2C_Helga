@@ -34,4 +34,11 @@ $routes->group('gudang', ['filter' => 'gudangfilter'], function($routes) {
 
     // Permintaan
     $routes->get('permintaan', 'Gudang::permintaanIndex');
+    $routes->get('permintaan/detail/(:num)', 'Gudang::permintaanDetail/$1'); // detail permintaan
+    $routes->get('permintaan/approve/(:num)', 'Gudang::approve/$1');        // setujui
+    $routes->get('permintaan/reject/(:num)', 'Gudang::reject/$1');          // tolak
 });
+
+
+
+

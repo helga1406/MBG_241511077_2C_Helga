@@ -171,4 +171,82 @@ class Gudang extends BaseController
         return view('gudang/permintaan/index', ['permintaan' => $permintaan]);
     }
 
+    public function permintaanDetail($id)
+    {
+        $permintaan = $this->permintaanModel
+            ->select('permintaan.*, users.name as nama_pemohon')
+            ->join('users', 'users.id = permintaan.pemohon_id')
+            ->find($id);
+
+        if (!$permintaan) {
+            return redirect()->to(base_url('gudang/permintaan'))->with('error', 'Permintaan tidak ditemukan.');
+        }
+
+        $detail = $this->permintaanDetailModel
+            ->select('permintaan_detail.*, bahan_baku.nama, bahan_baku.satuan')
+            ->join('bahan_baku', 'bahan_baku.id = permintaan_detail.bahan_id')
+            ->where('permintaan_detail.permintaan_id', $id)
+            ->findAll();
+
+        return view('gudang/permintaan/detail', [
+            'permintaan' => $permintaan,
+            'detail' => $detail
+        ]);
+    }
+
+    public function approve($id)
+    {
+        $permintaan = $this->permintaanModel->find($id);
+        if (!$permintaan) {
+            return redirect()->to(base_url('gudang/permintaan'))->with('error', 'Permintaan tidak ditemukan.');
+        }
+
+        if ($permintaan['status'] === 'disetujui') {
+            return redirect()->to(base_url('gudang/permintaan'))
+                ->with('error', 'Permintaan ini sudah disetujui sebelumnya.');
+        }
+
+        if ($permintaan['status'] === 'ditolak') {
+            return redirect()->to(base_url('gudang/permintaan'))
+                ->with('error', 'Permintaan ini sudah ditolak, tidak bisa disetujui.');
+        }
+
+        $details = $this->permintaanDetailModel
+            ->where('permintaan_id', $id)
+            ->findAll();
+
+        foreach ($details as $d) {
+            $bahan = $this->bahanModel->find($d['bahan_id']);
+            if ($bahan && $bahan['jumlah'] >= $d['jumlah_diminta']) {
+                $newJumlah = $bahan['jumlah'] - $d['jumlah_diminta'];
+                $status = $this->hitungStatus($newJumlah, $bahan['tanggal_kadaluarsa']);
+
+                // Update stok & status pakai model
+                $this->bahanModel->update($bahan['id'], [
+                    'jumlah' => $newJumlah,
+                    'status' => $status
+                ]);
+            } else {
+                return redirect()->to(base_url('gudang/permintaan'))
+                    ->with('error', 'Stok bahan ' . $bahan['nama'] . ' tidak mencukupi.');
+            }
+        }
+
+        // Update status permintaan
+        $this->permintaanModel->update($id, ['status' => 'disetujui']);
+
+        return redirect()->to(base_url('gudang/permintaan'))
+            ->with('success', 'Permintaan disetujui & stok berhasil dikurangi.');
+    }
+
+    public function reject($id)
+    {
+        $permintaan = $this->permintaanModel->find($id);
+        if (!$permintaan) {
+            return redirect()->to(base_url('gudang/permintaan'))->with('error', 'Permintaan tidak ditemukan.');
+        }
+
+        $this->permintaanModel->update($id, ['status' => 'ditolak']);
+        return redirect()->to(base_url('gudang/permintaan'))->with('success', 'Permintaan ditolak.');
+    }
 }

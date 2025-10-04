@@ -52,6 +52,19 @@
                   </td>
                   <td class="text-center">
                     
+                  <!-- Tombol Detail -->
+                  <a href="<?= base_url('gudang/permintaan/detail/'.$p['id']) ?>" 
+                     class="btn btn-info btn-sm shadow-sm">Detail</a>
+
+                  <!-- Tombol Setujui / Tolak hanya untuk status menunggu -->
+                  <?php if($p['status'] == 'menunggu'): ?>
+                    <a href="<?= base_url('gudang/permintaan/approve/'.$p['id']) ?>" 
+                       class="btn btn-success btn-sm shadow-sm"
+                       onclick="return confirm('Setujui permintaan ini?')">Setujui</a>
+                    <a href="<?= base_url('gudang/permintaan/reject/'.$p['id']) ?>" 
+                       class="btn btn-danger btn-sm shadow-sm"
+                       onclick="return confirm('Tolak permintaan ini?')">Tolak</a>
+                  <?php endif; ?>
                 </td>
               </tr>
               <?php endforeach; ?>
