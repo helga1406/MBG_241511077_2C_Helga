@@ -62,12 +62,16 @@
     });
   });
 
-  // Logout
-  document.querySelectorAll('.btn-logout').forEach(function (btn) {
+// Tombol hapus
+  document.querySelectorAll('.btn-delete').forEach(function (btn) {
     btn.addEventListener('click', function (event) {
       event.preventDefault();
       targetHref = this.getAttribute('href');
-      confirmMessage.innerText = "Apakah Anda yakin ingin logout?";
+      confirmMessage.innerText = "Apakah Anda yakin ingin menghapus data ini?";
+      document.querySelector('.modal-header').classList.remove('bg-warning');
+      document.querySelector('.modal-header').classList.add('bg-danger', 'text-white');
+      document.getElementById('btnConfirmAction').className = "btn btn-danger";
+      document.getElementById('btnConfirmAction').innerText = "Ya, Hapus";
       confirmModal.show();
     });
   });

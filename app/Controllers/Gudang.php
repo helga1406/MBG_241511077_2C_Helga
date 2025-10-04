@@ -45,6 +45,7 @@ class Gudang extends BaseController
     }
 
     // ================= CRUD BAHAN =================
+
     public function bahanIndex()
     {
         $bahan = $this->bahanModel->findAll();
@@ -81,6 +82,7 @@ class Gudang extends BaseController
             'satuan'             => $satuan,
             'tanggal_masuk'      => $tglMasuk,
             'tanggal_kadaluarsa' => $tglExpired,
+            'status'             => $this->hitungStatus($jumlah, $tglExpired), // status otomatis
             'created_at'         => date('Y-m-d H:i:s')
         ]);
 
@@ -107,16 +109,47 @@ class Gudang extends BaseController
         if ($error) {
             return redirect()->back()->with('error', $error);
         }
+
         $this->bahanModel->update($id, [
             'nama'               => $this->request->getPost('nama'),
             'kategori'           => $this->request->getPost('kategori'),
             'jumlah'             => $jumlah,
             'satuan'             => $this->request->getPost('satuan'),
             'tanggal_masuk'      => $tglMasuk,
-            'tanggal_kadaluarsa' => $tglExpired
+            'tanggal_kadaluarsa' => $tglExpired,
+            'status'             => $this->hitungStatus($jumlah, $tglExpired) // status otomatis
         ]);
 
         return redirect()->to(base_url('gudang/bahan'))->with('success', 'Bahan berhasil diupdate.');
+    }
+
+    public function bahanDeleteConfirm($id)
+    {
+        $bahan = $this->bahanModel->find($id);
+        if (!$bahan) {
+            return redirect()->to(base_url('gudang/bahan'))->with('error', 'Data tidak ditemukan.');
+        }
+
+        // Hitung ulang status berdasarkan tanggal hari ini
+        $bahan['status'] = $this->hitungStatus($bahan['jumlah'], $bahan['tanggal_kadaluarsa']);
+
+        return view('gudang/bahan/delete', ['bahan' => $bahan]);
+    }
+
+    public function bahanDelete($id)
+    {
+        $bahan = $this->bahanModel->find($id);
+        if (!$bahan) {
+            return redirect()->to(base_url('gudang/bahan'))->with('error', 'Data bahan tidak ditemukan.');
+        }
+
+        $today = date('Y-m-d');
+        if (!($today >= $bahan['tanggal_kadaluarsa'])) {
+            return redirect()->to(base_url('gudang/bahan'))->with('error', 'Hanya bahan kadaluarsa yang bisa dihapus.');
+        }
+
+        $this->bahanModel->delete($id);
+        return redirect()->to(base_url('gudang/bahan'))->with('success', 'Bahan berhasil dihapus.');
     }
 
 }
