@@ -3,14 +3,20 @@
 namespace App\Controllers;
 
 use App\Models\BahanModel;
+use App\Models\PermintaanModel;
+use App\Models\PermintaanDetailModel;
 
 class Gudang extends BaseController
 {
     protected $bahanModel;
+    protected $permintaanModel;
+    protected $permintaanDetailModel;
 
     public function __construct()
     {
         $this->bahanModel = new BahanModel();
+        $this->permintaanModel = new PermintaanModel();
+        $this->permintaanDetailModel = new PermintaanDetailModel();
     }
 
     // ================= DASHBOARD =================
@@ -150,6 +156,19 @@ class Gudang extends BaseController
 
         $this->bahanModel->delete($id);
         return redirect()->to(base_url('gudang/bahan'))->with('success', 'Bahan berhasil dihapus.');
+    }
+
+    // ================= PERMINTAAN =================
+
+    public function permintaanIndex()
+    {
+        $permintaan = $this->permintaanModel
+            ->select('permintaan.id, users.name as nama_pemohon, permintaan.menu_makan, permintaan.jumlah_porsi, permintaan.tgl_masak, permintaan.status, permintaan.created_at')
+            ->join('users', 'users.id = permintaan.pemohon_id')
+            ->orderBy('permintaan.created_at', 'ASC')
+            ->findAll();
+
+        return view('gudang/permintaan/index', ['permintaan' => $permintaan]);
     }
 
 }
