@@ -25,4 +25,6 @@ $routes->group('gudang', ['filter' => 'gudangfilter'], function($routes) {
     $routes->get('bahan', 'Gudang::bahanIndex');
     $routes->get('bahan/create', 'Gudang::bahanCreate');
     $routes->post('bahan/store', 'Gudang::bahanStore');
+    $routes->get('bahan/edit/(:num)', 'Gudang::bahanEdit/$1');
+    $routes->post('bahan/update/(:num)', 'Gudang::bahanUpdate/$1');
 });

@@ -86,4 +86,37 @@ class Gudang extends BaseController
 
         return redirect()->to(base_url('gudang/bahan'))->with('success', 'Bahan berhasil ditambahkan.');
     }
+
+    public function bahanEdit($id)
+    {
+        $bahan = $this->bahanModel->find($id);
+        if (!$bahan) {
+            return redirect()->to(base_url('gudang/bahan'))->with('error', 'Data tidak ditemukan.');
+        }
+        return view('gudang/bahan/edit', ['bahan' => $bahan]);
+    }
+
+    public function bahanUpdate($id)
+    {
+        $jumlah     = (int)$this->request->getPost('jumlah');
+        $tglMasuk   = $this->request->getPost('tanggal_masuk');
+        $tglExpired = $this->request->getPost('tanggal_kadaluarsa');
+
+        // Validasi
+        $error = $this->validateBahan($jumlah, $tglMasuk, $tglExpired);
+        if ($error) {
+            return redirect()->back()->with('error', $error);
+        }
+        $this->bahanModel->update($id, [
+            'nama'               => $this->request->getPost('nama'),
+            'kategori'           => $this->request->getPost('kategori'),
+            'jumlah'             => $jumlah,
+            'satuan'             => $this->request->getPost('satuan'),
+            'tanggal_masuk'      => $tglMasuk,
+            'tanggal_kadaluarsa' => $tglExpired
+        ]);
+
+        return redirect()->to(base_url('gudang/bahan'))->with('success', 'Bahan berhasil diupdate.');
+    }
+
 }
